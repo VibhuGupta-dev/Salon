@@ -5,7 +5,6 @@ import cutImg from '../assets/cut.jpg';
 import colourImg from '../assets/color.jpg';
 import textureImg from '../assets/texture.jpg';
 import treatImg from '../assets/treatement.jpg';
-import galleryVid from '../assets/video2.mp4';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -103,7 +102,6 @@ export default function Service() {
       id="services"
       className="bg-[#0a0a0a] text-white overflow-hidden"
     >
-
       {/* ── Header ──────────────────────────────────── */}
       <div ref={headerRef} className="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-16">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -122,7 +120,6 @@ export default function Service() {
             Where tradition meets modern luxury — every service is a curated experience.
           </p>
         </div>
-        {/* Beige rule */}
         <div className="mt-12 h-px bg-gradient-to-r from-[#c9b898]/40 via-[#c9b898]/10 to-transparent" />
       </div>
 
@@ -138,13 +135,9 @@ export default function Service() {
               onClick={() => handleServiceChange(i)}
             >
               <div className="flex items-start gap-6 flex-1">
-
-                {/* Number */}
                 <span className="text-[11px] tracking-widest text-[#c9b898]/25 mt-2 font-light w-6 flex-shrink-0">
                   {svc.number}
                 </span>
-
-                {/* Text */}
                 <div className="flex-1">
                   <div className="flex items-center gap-4">
                     <h3
@@ -161,10 +154,7 @@ export default function Service() {
                       style={{ opacity: active === i ? 1 : 0 }}
                     />
                   </div>
-
                   <p className="text-white/30 text-xs tracking-wider mt-2">{svc.tagline}</p>
-
-                  {/* Expanded items */}
                   <div
                     className="overflow-hidden transition-all duration-500 ease-in-out"
                     style={{ maxHeight: active === i ? '200px' : '0px', opacity: active === i ? 1 : 0 }}
@@ -186,8 +176,6 @@ export default function Service() {
                   </div>
                 </div>
               </div>
-
-              {/* Expand toggle */}
               <span
                 className="text-2xl font-extralight flex-shrink-0 mt-1 transition-all duration-300"
                 style={{
@@ -214,30 +202,21 @@ export default function Service() {
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-
-              {/* Caption */}
               <div className="absolute bottom-6 left-6 right-6">
                 <div className="h-px bg-[#c9b898]/50 mb-4 w-10" />
-                <p
-                  className="text-white text-xl font-light"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
-                >
+                <p className="text-white text-xl font-light" style={{ fontFamily: "'Playfair Display', serif" }}>
                   {services[active].title}
                 </p>
                 <p className="text-[#c9b898]/70 text-xs tracking-wider mt-1">
                   {services[active].tagline}
                 </p>
               </div>
-
-              {/* Watermark number */}
               <div
                 className="absolute top-5 right-5 text-[72px] font-light text-white/5 leading-none select-none"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {services[active].number}
               </div>
-
-              {/* Beige corner accent */}
               <div className="absolute top-0 left-0 w-12 h-px bg-[#c9b898]/30" />
               <div className="absolute top-0 left-0 w-px h-12 bg-[#c9b898]/30" />
             </div>
@@ -245,16 +224,28 @@ export default function Service() {
         </div>
       </div>
 
-
-
       {/* ── Video ────────────────────────────────────── */}
       <div ref={videoRef} className="max-w-7xl mx-auto px-6 md:px-12 pb-28">
         <div className="relative rounded-2xl overflow-hidden aspect-video will-change-transform">
+          {/*
+            ✅ FIXED: Cloudinary embed URLs don't work in <video> tags.
+            Use the direct upload URL format:
+              https://res.cloudinary.com/YOUR_CLOUD_NAME/video/upload/PUBLIC_ID.mp4
+
+            If you have a local file, use:
+              import galleryVid from '../assets/video2.mp4';
+              <source src={galleryVid} type="video/mp4" />
+          */}
           <video
-            src={galleryVid}
             autoPlay muted loop playsInline
             className="w-full h-full object-cover"
-          />
+          >
+            <source
+              src="https://res.cloudinary.com/domylmj7e/video/upload/video2_swbcwm.mp4"
+              type="video/mp4"
+            />
+          </video>
+
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent" />
 
           <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12">
@@ -276,15 +267,39 @@ export default function Service() {
         </div>
       </div>
 
-    
-      {/* Marquee keyframe */}
+      {/* ── CTA ──────────────────────────────────────────────────────────────── */}
+      <div className="border-t border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-14 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <p
+            className="text-2xl md:text-3xl font-light text-white/70 tracking-tight"
+            style={{ fontFamily: "'Playfair Display', serif" }}
+          >
+            Ready for your{' '}
+            <em className="italic text-[#d4c4a8]">transformation?</em>
+          </p>
+          <div className="flex gap-3 flex-shrink-0">
+            <a
+              href="#contact"
+              className="px-8 py-3.5 bg-[#d4c4a8] text-black font-medium rounded-full text-sm tracking-wide transition-colors duration-300 hover:bg-white"
+            >
+              Book Appointment
+            </a>
+            <a
+              href="#contact"
+              className="px-8 py-3.5 border border-[#c9b898]/25 text-[#c9b898] font-light rounded-full text-sm tracking-wide transition-colors duration-300 hover:bg-white/5"
+            >
+              View Pricing
+            </a>
+          </div>
+        </div>
+      </div>
+
       <style>{`
         @keyframes marquee {
           from { transform: translateX(0); }
           to   { transform: translateX(-50%); }
         }
       `}</style>
-
     </section>
   );
 }

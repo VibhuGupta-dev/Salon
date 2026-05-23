@@ -1,67 +1,165 @@
-// src/components/Home.jsx
-import React from 'react';
-import video from "../assets/video1.mp4";
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
 export default function Home() {
-  return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  const eyebrowRef  = useRef(null);
+  const headingRef  = useRef(null);
+  const ruleRef     = useRef(null);
+  const subtitleRef = useRef(null);
+  const buttonsRef  = useRef(null);
+  const scrollRef   = useRef(null);
 
-      {/* Video Background */}
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    // staggered cinematic entrance
+    tl.fromTo(eyebrowRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0,  opacity: 1, duration: 0.9 })
+      .fromTo('.home-word',
+        { y: 80, opacity: 0, rotateX: -40 },
+        { y: 0,  opacity: 1, rotateX: 0, duration: 1.1, stagger: 0.08,
+          transformOrigin: 'top center' },
+        '-=0.5')
+      .fromTo(ruleRef.current,
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.9, ease: 'expo.out',
+          transformOrigin: 'center center' },
+        '-=0.6')
+      .fromTo(subtitleRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0,  opacity: 1, duration: 0.8 },
+        '-=0.5')
+      .fromTo(buttonsRef.current.children,
+        { y: 20, opacity: 0 },
+        { y: 0,  opacity: 1, duration: 0.7, stagger: 0.1 },
+        '-=0.5')
+      .fromTo(scrollRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8 },
+        '-=0.3');
+
+    // subtle looping scroll indicator pulse
+    gsap.to('.scroll-line', {
+      scaleY: 0.4, opacity: 0, duration: 1.2,
+      ease: 'power1.inOut', repeat: -1, yoyo: true,
+      transformOrigin: 'top center', delay: 1.5,
+    });
+  }, []);
+
+  return (
+    <section id="home"
+      style={{ position: 'relative', minHeight: '100vh',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                overflow: 'hidden' }}>
+
+      {/* ── Video Background ─────────────────────────────────────── */}
       <video
         autoPlay muted loop playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%',
+                  objectFit: 'cover', zIndex: 0 }}
       >
-        <source src={video} type="video/mp4" />
+        {/*
+          Replace this src with your local import:
+            import video from "../assets/video1.mp4";
+            <source src={video} type="video/mp4" />
+
+          Cloudinary direct URL format (not the embed URL):
+            https://res.cloudinary.com/YOUR_CLOUD_NAME/video/upload/YOUR_PUBLIC_ID.mp4
+        */}
+        <source
+          src="https://res.cloudinary.com/domylmj7e/video/upload/video1_fpj14u.mp4"
+          type="video/mp4"
+        />
       </video>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+      {/* ── Overlay ──────────────────────────────────────────────── */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 1,
+                    background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.7) 100%)' }} />
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      {/* ── Content ──────────────────────────────────────────────── */}
+      <div style={{ position: 'relative', zIndex: 2, textAlign: 'center',
+                    padding: '0 1.5rem', maxWidth: 900, margin: '0 auto' }}>
 
-        {/* Eyebrow — same as Service */}
-        <p className="text-[11px] tracking-[0.4em] uppercase text-[#c9b898]/70 mb-6">
+        {/* Eyebrow */}
+        <p ref={eyebrowRef}
+          style={{ fontSize: 10, letterSpacing: '0.5em', textTransform: 'uppercase',
+                    color: 'rgba(201,184,152,0.7)', margin: '0 0 2rem' }}>
           Excellence in Every Detail
         </p>
 
-        {/* Heading — same font, same weight as Service */}
-        <h1
-          className="text-6xl md:text-7xl lg:text-8xl font-light tracking-tighter leading-none text-white mb-6"
-          style={{ fontFamily: "'Playfair Display', serif" }}
-        >
-          Elegance <em className="italic text-[#d4c4a8]">Redefined</em>
-        </h1>
+        {/* Heading — word split for GSAP */}
+        <div ref={headingRef} style={{ overflow: 'hidden' }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300,
+                        fontSize: 'clamp(3.5rem,10vw,7rem)', letterSpacing: '-0.04em',
+                        lineHeight: 0.95, margin: 0, color: '#fff' }}>
+            {'Elegance\u00A0'.split('').map((c, i) => (
+              <span key={`e${i}`} className="home-word"
+                style={{ display: 'inline-block' }}>
+                {c}
+              </span>
+            ))}
+            <em style={{ fontStyle: 'italic', color: '#d4c4a8' }}>
+              {'Redefined'.split('').map((c, i) => (
+                <span key={`r${i}`} className="home-word"
+                  style={{ display: 'inline-block' }}>
+                  {c}
+                </span>
+              ))}
+            </em>
+          </h1>
+        </div>
 
-        {/* Thin beige rule — same as Service */}
-        <div className="mx-auto mb-8 h-px w-16 bg-[#c9b898]/40" />
+        {/* Beige rule */}
+        <div ref={ruleRef}
+          style={{ width: 60, height: 1, background: 'rgba(201,184,152,0.45)',
+                    margin: '2rem auto' }} />
 
-        {/* Subtitle — same size/weight as Service description */}
-        <p className="text-sm md:text-base text-white/50 mb-10 max-w-md mx-auto leading-relaxed tracking-wide">
+        {/* Subtitle */}
+        <p ref={subtitleRef}
+          style={{ fontSize: 'clamp(0.8rem,1.5vw,1rem)', color: 'rgba(255,255,255,0.45)',
+                    margin: '0 0 2.5rem', maxWidth: 380, marginLeft: 'auto',
+                    marginRight: 'auto', lineHeight: 1.8, letterSpacing: '0.04em' }}>
           Experience luxury grooming and beauty services tailored just for you.
         </p>
 
-        {/* Buttons — same style as Service CTA */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <a
-            href="#services"
-            className="px-10 py-3.5 bg-[#d4c4a8] text-black font-medium rounded-full hover:bg-white transition-colors duration-300 text-sm tracking-wide"
-          >
+        {/* Buttons */}
+        <div ref={buttonsRef}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem',
+                    justifyContent: 'center' }}>
+          <a href="#services"
+            onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#000'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#d4c4a8'; e.currentTarget.style.color = '#000'; }}
+            style={{ padding: '0.9rem 2.5rem', background: '#d4c4a8', color: '#000',
+                      fontWeight: 500, fontSize: 11, letterSpacing: '0.15em',
+                      textTransform: 'uppercase', borderRadius: 999, textDecoration: 'none',
+                      transition: 'background 0.3s ease, color 0.3s ease' }}>
             Explore Services
           </a>
-          <a
-            href="#contact"
-            className="px-10 py-3.5 border border-[#c9b898]/25 text-[#c9b898] font-light rounded-full hover:bg-white/5 transition-colors duration-300 text-sm tracking-wide"
-          >
+          <a href="#contact"
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+            style={{ padding: '0.9rem 2.5rem', border: '1px solid rgba(201,184,152,0.28)',
+                      color: '#c9b898', fontWeight: 300, fontSize: 11, letterSpacing: '0.15em',
+                      textTransform: 'uppercase', borderRadius: 999, textDecoration: 'none',
+                      transition: 'background 0.3s ease', background: 'transparent' }}>
             Book Appointment
           </a>
         </div>
       </div>
 
-      {/* Scroll Indicator — same muted style */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <p className="text-[10px] tracking-[0.35em] uppercase text-white/25">Scroll to Discover</p>
-        <div className="w-px h-12 bg-gradient-to-b from-[#c9b898]/30 to-transparent" />
+      {/* ── Scroll Indicator ─────────────────────────────────────── */}
+      <div ref={scrollRef}
+        style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  gap: 8, zIndex: 2 }}>
+        <p style={{ fontSize: 9, letterSpacing: '0.4em', textTransform: 'uppercase',
+                     color: 'rgba(255,255,255,0.22)', margin: 0 }}>
+          Scroll to Discover
+        </p>
+        <div className="scroll-line"
+          style={{ width: 1, height: 48,
+                    background: 'linear-gradient(to bottom, rgba(201,184,152,0.4), transparent)' }} />
       </div>
 
     </section>
