@@ -105,26 +105,29 @@ export default function Home() {
         </p>
 
         {/* Heading — word split for GSAP */}
-        <div ref={headingRef} style={{ overflow: 'hidden' }}>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300,
-                        fontSize: 'clamp(3.5rem,10vw,7rem)', letterSpacing: '-0.04em',
-                        lineHeight: 0.95, margin: 0, color: '#fff' }}>
-            {'Elegance\u00A0'.split('').map((c, i) => (
-              <span key={`e${i}`} className="home-word"
-                style={{ display: 'inline-block' }}>
-                {c}
-              </span>
-            ))}
-            <em style={{ fontStyle: 'italic', color: '#d4c4a8' }}>
-              {'Redefined'.split('').map((c, i) => (
-                <span key={`r${i}`} className="home-word"
-                  style={{ display: 'inline-block' }}>
-                  {c}
-                </span>
-              ))}
-            </em>
-          </h1>
-        </div>
+        <div ref={headingRef} className="overflow-hidden">
+  <h1 
+    className="font-playfair font-light text-white text-center
+               text-[clamp(2.5rem,7vw,7rem)] 
+               tracking-[-0.04em] leading-[0.95]
+               whitespace-nowrap"
+  >
+    {'Elegance\u00A0'.split('').map((c, i) => (
+      <span key={`e${i}`} className="home-word inline-block">
+        {c}
+      </span>
+    ))}
+    <em 
+      className="text-[#d4c4a8] italic font-light inline"
+    >
+      {'Redefined'.split('').map((c, i) => (
+        <span key={`r${i}`} className="home-word inline-block">
+          {c}
+        </span>
+      ))}
+    </em>
+  </h1>
+</div>
 
         {/* Beige rule */}
         <div ref={ruleRef}
