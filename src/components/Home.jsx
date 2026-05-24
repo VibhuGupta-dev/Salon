@@ -10,6 +10,16 @@ export default function Home() {
   const scrollRef   = useRef(null);
 
   useEffect(() => {
+    // Safety check — agar koi bhi ref null hai toh early return
+    if (
+      !eyebrowRef.current ||
+      !headingRef.current ||
+      !ruleRef.current ||
+      !subtitleRef.current ||
+      !buttonsRef.current ||
+      !scrollRef.current
+    ) return;
+
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
     // staggered cinematic entrance
@@ -30,7 +40,7 @@ export default function Home() {
         { y: 20, opacity: 0 },
         { y: 0,  opacity: 1, duration: 0.8 },
         '-=0.5')
-      .fromTo(buttonsRef.current.children,
+      .fromTo(Array.from(buttonsRef.current.children),
         { y: 20, opacity: 0 },
         { y: 0,  opacity: 1, duration: 0.7, stagger: 0.1 },
         '-=0.5')
@@ -45,6 +55,12 @@ export default function Home() {
       ease: 'power1.inOut', repeat: -1, yoyo: true,
       transformOrigin: 'top center', delay: 1.5,
     });
+
+    // Cleanup on unmount
+    return () => {
+      tl.kill();
+      gsap.killTweensOf('.scroll-line');
+    };
   }, []);
 
   return (
